@@ -1,0 +1,469 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0EFB5A8E2EC660C7A1585A87 /* SignaturePlacementOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B08E2A78D2A1DDA5FBE69D /* SignaturePlacementOverlayView.swift */; };
+		12F64B32751069BE98ECAE60 /* PDFRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106C399CB6CB2818690B5BFC /* PDFRenderer.swift */; };
+		207A647FCB38240FD55A3275 /* ImportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B383842A5AF9BB92642A4F /* ImportCoordinator.swift */; };
+		21F9B8793F31F53A4F75A1A6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D98A1CFF7DC4F931D440DC /* Foundation.framework */; };
+		22A1B04A077777C9C70D9C82 /* DocumentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBC248B8F14CF2D708170B /* DocumentStore.swift */; };
+		2D22BF6CF02CEEED9462228E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFD50A4DDE3C5264A0AA143 /* AppDelegate.swift */; };
+		510CAAEAA5AEC332C05A9350 /* PDFNormalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5639EB2D0E8E0AC95B537B9F /* PDFNormalizer.swift */; };
+		591341FF4DBBFEC21A57DB10 /* ScanCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2E1D9B6626FFF30E1741D9 /* ScanCoordinator.swift */; };
+		5AD9316D4E09D93396B5492A /* OCRTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17C54D7DD8F72C1C0E57F8C /* OCRTextViewController.swift */; };
+		60E5D907E19816A45A257A05 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CBFC3C578FB69D83840389 /* SceneDelegate.swift */; };
+		9357EFB96C9E0131CF9C6FEE /* SignatureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799750A41E5F5B43D15A4B13 /* SignatureStore.swift */; };
+		9CA12AEB133689FDB803435E /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C04C14F74620005F2A1EFD /* HistoryViewController.swift */; };
+		9CC4D75DFC286A0D0B89E6DA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF88C5BDAADA0365827EEA2 /* HomeViewController.swift */; };
+		A269ECC91AF4AFAC09E8EC58 /* ShareCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A004D06CCF01E0CF308254 /* ShareCoordinator.swift */; };
+		AA05E3EDBBD0F9BF244C82C7 /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81339F6228FFD09EA4DE51AD /* OCRService.swift */; };
+		B7BE27F0C6301681994121FC /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0A2DABD5E34B169EC939C8 /* OnboardingViewController.swift */; };
+		BFCD7535867C1DBD9538B8A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F19130E25DFED01E8910F793 /* Assets.xcassets */; };
+		C45D6CF32F534C4700A31AAE /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45D6CF22F534C4700A31AAE /* ImageProcessor.swift */; };
+		C45D6CF52F534C6000A31AAE /* PageSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45D6CF42F534C6000A31AAE /* PageSelectionViewController.swift */; };
+		C45D6CF92F534D3300A31AAE /* TextEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45D6CF82F534D3300A31AAE /* TextEditViewController.swift */; };
+		C45D6CFB2F534D5600A31AAE /* SignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45D6CFA2F534D5600A31AAE /* SignatureViewController.swift */; };
+		C45D6CFD2F534D7800A31AAE /* DocumentActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45D6CFC2F534D7800A31AAE /* DocumentActionViewController.swift */; };
+		C46679762F53A4340007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerPDFActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46679752F53A4340007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerPDFActionViewController.swift */; };
+		C46679782F53B1E20007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerSignaturePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46679772F53B1E20007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerSignaturePreviewViewController.swift */; };
+		C466797A2F53B2110007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerSignatureEditableOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46679792F53B2110007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerSignatureEditableOverlayView.swift */; };
+		C4E185492F57D47500D6DF0F /* TermsAndConditions.md in Resources */ = {isa = PBXBuildFile; fileRef = C4E185482F57D47500D6DF0F /* TermsAndConditions.md */; };
+		C4E1854B2F57D60100D6DF0F /* TextDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E1854A2F57D60100D6DF0F /* TextDisplayViewController.swift */; };
+		C4E1854D2F590A5200D6DF0F /* PrivacyPolicy.md in Resources */ = {isa = PBXBuildFile; fileRef = C4E1854C2F590A5200D6DF0F /* PrivacyPolicy.md */; };
+		C4E1854F2F59210A00D6DF0F /* NotificationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E1854E2F59210A00D6DF0F /* NotificationSettingsViewController.swift */; };
+		C4E185512F5924AA00D6DF0F /* HelpCenter.md in Resources */ = {isa = PBXBuildFile; fileRef = C4E185502F5924AA00D6DF0F /* HelpCenter.md */; };
+		C4E185532F5CE34E00D6DF0F /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E185522F5CE34E00D6DF0F /* FavoritesViewController.swift */; };
+		D335A9DBA8E8A1FE1CE7225A /* DocumentItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1B50FD20BE9D6CB890AACE /* DocumentItem.swift */; };
+		D67CC47E7C241D24FEF3482B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D35DF2591D40AC153530D6 /* SettingsViewController.swift */; };
+		DFFC7BE022E5801F276168D3 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8F2FA4C59A66BFFA3B7159 /* MainTabBarController.swift */; };
+		F76A71F63C1448FCDD3DAC87 /* DocumentPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93D251EEBA42599E4F73C6 /* DocumentPreviewViewController.swift */; };
+		F8FF708ACE49A14FE9A8EA3F /* OnboardingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A09CFBA55A77C613FD3A349 /* OnboardingPageView.swift */; };
+		FE60B275F9A7CABA4B1DB6E9 /* PDFSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C249543D6BEFD7FF6611C8A /* PDFSigner.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		106C399CB6CB2818690B5BFC /* PDFRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PDFRenderer.swift; path = PhotoToPDFMaker/PDFRenderer.swift; sourceTree = "<group>"; };
+		10B383842A5AF9BB92642A4F /* ImportCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImportCoordinator.swift; path = PhotoToPDFMaker/ImportCoordinator.swift; sourceTree = "<group>"; };
+		22D35DF2591D40AC153530D6 /* SettingsViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = PhotoToPDFMaker/SettingsViewController.swift; sourceTree = "<group>"; };
+		2A09CFBA55A77C613FD3A349 /* OnboardingPageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OnboardingPageView.swift; path = PhotoToPDFMaker/OnboardingPageView.swift; sourceTree = "<group>"; };
+		34A004D06CCF01E0CF308254 /* ShareCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShareCoordinator.swift; path = PhotoToPDFMaker/ShareCoordinator.swift; sourceTree = "<group>"; };
+		3BF88C5BDAADA0365827EEA2 /* HomeViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeViewController.swift; path = PhotoToPDFMaker/HomeViewController.swift; sourceTree = "<group>"; };
+		5639EB2D0E8E0AC95B537B9F /* PDFNormalizer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PDFNormalizer.swift; path = PhotoToPDFMaker/PDFNormalizer.swift; sourceTree = "<group>"; };
+		67FBC248B8F14CF2D708170B /* DocumentStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DocumentStore.swift; path = PhotoToPDFMaker/DocumentStore.swift; sourceTree = "<group>"; };
+		799750A41E5F5B43D15A4B13 /* SignatureStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SignatureStore.swift; path = PhotoToPDFMaker/SignatureStore.swift; sourceTree = "<group>"; };
+		81339F6228FFD09EA4DE51AD /* OCRService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OCRService.swift; path = PhotoToPDFMaker/OCRService.swift; sourceTree = "<group>"; };
+		8B93D251EEBA42599E4F73C6 /* DocumentPreviewViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DocumentPreviewViewController.swift; path = PhotoToPDFMaker/DocumentPreviewViewController.swift; sourceTree = "<group>"; };
+		8C8F2FA4C59A66BFFA3B7159 /* MainTabBarController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MainTabBarController.swift; path = PhotoToPDFMaker/MainTabBarController.swift; sourceTree = "<group>"; };
+		9C249543D6BEFD7FF6611C8A /* PDFSigner.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PDFSigner.swift; path = PhotoToPDFMaker/PDFSigner.swift; sourceTree = "<group>"; };
+		A17C54D7DD8F72C1C0E57F8C /* OCRTextViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OCRTextViewController.swift; path = PhotoToPDFMaker/OCRTextViewController.swift; sourceTree = "<group>"; };
+		BA1B50FD20BE9D6CB890AACE /* DocumentItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DocumentItem.swift; path = PhotoToPDFMaker/DocumentItem.swift; sourceTree = "<group>"; };
+		BB0A2DABD5E34B169EC939C8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OnboardingViewController.swift; path = PhotoToPDFMaker/OnboardingViewController.swift; sourceTree = "<group>"; };
+		BCFD50A4DDE3C5264A0AA143 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = PhotoToPDFMaker/AppDelegate.swift; sourceTree = "<group>"; };
+		C45D6CF22F534C4700A31AAE /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
+		C45D6CF42F534C6000A31AAE /* PageSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSelectionViewController.swift; sourceTree = "<group>"; };
+		C45D6CF82F534D3300A31AAE /* TextEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditViewController.swift; sourceTree = "<group>"; };
+		C45D6CFA2F534D5600A31AAE /* SignatureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureViewController.swift; sourceTree = "<group>"; };
+		C45D6CFC2F534D7800A31AAE /* DocumentActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActionViewController.swift; sourceTree = "<group>"; };
+		C46679752F53A4340007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerPDFActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersjplProjectsPDFMakerPhotoToPDFMakerPDFActionViewController.swift; sourceTree = "<group>"; };
+		C46679772F53B1E20007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerSignaturePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersjplProjectsPDFMakerPhotoToPDFMakerSignaturePreviewViewController.swift; sourceTree = "<group>"; };
+		C46679792F53B2110007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerSignatureEditableOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersjplProjectsPDFMakerPhotoToPDFMakerSignatureEditableOverlayView.swift; sourceTree = "<group>"; };
+		C4E185482F57D47500D6DF0F /* TermsAndConditions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TermsAndConditions.md; sourceTree = "<group>"; };
+		C4E1854A2F57D60100D6DF0F /* TextDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDisplayViewController.swift; sourceTree = "<group>"; };
+		C4E1854C2F590A5200D6DF0F /* PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PrivacyPolicy.md; sourceTree = "<group>"; };
+		C4E1854E2F59210A00D6DF0F /* NotificationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsViewController.swift; sourceTree = "<group>"; };
+		C4E185502F5924AA00D6DF0F /* HelpCenter.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = HelpCenter.md; sourceTree = "<group>"; };
+		C4E185522F5CE34E00D6DF0F /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		C9C04C14F74620005F2A1EFD /* HistoryViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HistoryViewController.swift; path = PhotoToPDFMaker/HistoryViewController.swift; sourceTree = "<group>"; };
+		E1D9559D11B060451812AB06 /* PhotoToPDFMaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoToPDFMaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F19130E25DFED01E8910F793 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = PhotoToPDFMaker/Assets.xcassets; sourceTree = "<group>"; };
+		F5B08E2A78D2A1DDA5FBE69D /* SignaturePlacementOverlayView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SignaturePlacementOverlayView.swift; path = PhotoToPDFMaker/SignaturePlacementOverlayView.swift; sourceTree = "<group>"; };
+		F9CBFC3C578FB69D83840389 /* SceneDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = PhotoToPDFMaker/SceneDelegate.swift; sourceTree = "<group>"; };
+		F9D98A1CFF7DC4F931D440DC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		FE2E1D9B6626FFF30E1741D9 /* ScanCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScanCoordinator.swift; path = PhotoToPDFMaker/ScanCoordinator.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		ABFBF18473B3A80A9531C17F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				21F9B8793F31F53A4F75A1A6 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		191BBDEBF63834A936CE2FFA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C3C00509D323ACF820A56244 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		92B42CD910B6763EB1B644F2 /* PhotoToPDFMaker */ = {
+			isa = PBXGroup;
+			children = (
+				9C249543D6BEFD7FF6611C8A /* PDFSigner.swift */,
+				2A09CFBA55A77C613FD3A349 /* OnboardingPageView.swift */,
+				106C399CB6CB2818690B5BFC /* PDFRenderer.swift */,
+				5639EB2D0E8E0AC95B537B9F /* PDFNormalizer.swift */,
+				34A004D06CCF01E0CF308254 /* ShareCoordinator.swift */,
+				8B93D251EEBA42599E4F73C6 /* DocumentPreviewViewController.swift */,
+				81339F6228FFD09EA4DE51AD /* OCRService.swift */,
+				3BF88C5BDAADA0365827EEA2 /* HomeViewController.swift */,
+				F5B08E2A78D2A1DDA5FBE69D /* SignaturePlacementOverlayView.swift */,
+				8C8F2FA4C59A66BFFA3B7159 /* MainTabBarController.swift */,
+				BB0A2DABD5E34B169EC939C8 /* OnboardingViewController.swift */,
+				799750A41E5F5B43D15A4B13 /* SignatureStore.swift */,
+				67FBC248B8F14CF2D708170B /* DocumentStore.swift */,
+				10B383842A5AF9BB92642A4F /* ImportCoordinator.swift */,
+				FE2E1D9B6626FFF30E1741D9 /* ScanCoordinator.swift */,
+				BA1B50FD20BE9D6CB890AACE /* DocumentItem.swift */,
+				BCFD50A4DDE3C5264A0AA143 /* AppDelegate.swift */,
+				A17C54D7DD8F72C1C0E57F8C /* OCRTextViewController.swift */,
+				C9C04C14F74620005F2A1EFD /* HistoryViewController.swift */,
+				F9CBFC3C578FB69D83840389 /* SceneDelegate.swift */,
+				22D35DF2591D40AC153530D6 /* SettingsViewController.swift */,
+				F19130E25DFED01E8910F793 /* Assets.xcassets */,
+				C45D6CF22F534C4700A31AAE /* ImageProcessor.swift */,
+				C45D6CF42F534C6000A31AAE /* PageSelectionViewController.swift */,
+				C45D6CF82F534D3300A31AAE /* TextEditViewController.swift */,
+				C45D6CFA2F534D5600A31AAE /* SignatureViewController.swift */,
+				C45D6CFC2F534D7800A31AAE /* DocumentActionViewController.swift */,
+				C46679752F53A4340007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerPDFActionViewController.swift */,
+				C46679772F53B1E20007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerSignaturePreviewViewController.swift */,
+				C46679792F53B2110007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerSignatureEditableOverlayView.swift */,
+				C4E185482F57D47500D6DF0F /* TermsAndConditions.md */,
+				C4E1854A2F57D60100D6DF0F /* TextDisplayViewController.swift */,
+				C4E1854C2F590A5200D6DF0F /* PrivacyPolicy.md */,
+				C4E1854E2F59210A00D6DF0F /* NotificationSettingsViewController.swift */,
+				C4E185502F5924AA00D6DF0F /* HelpCenter.md */,
+				C4E185522F5CE34E00D6DF0F /* FavoritesViewController.swift */,
+			);
+			name = PhotoToPDFMaker;
+			sourceTree = "<group>";
+		};
+		92DAA633CE690432FD97813E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E1D9559D11B060451812AB06 /* PhotoToPDFMaker.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3C00509D323ACF820A56244 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				F9D98A1CFF7DC4F931D440DC /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		FABF21B9127FB021E4F5F379 = {
+			isa = PBXGroup;
+			children = (
+				92DAA633CE690432FD97813E /* Products */,
+				191BBDEBF63834A936CE2FFA /* Frameworks */,
+				92B42CD910B6763EB1B644F2 /* PhotoToPDFMaker */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D4C5F51AFE4AA1C55F38FB9C /* PhotoToPDFMaker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0EF8AFE9562DAB88391B12F3 /* Build configuration list for PBXNativeTarget "PhotoToPDFMaker" */;
+			buildPhases = (
+				3F35318DBE53D14F47C01232 /* Sources */,
+				ABFBF18473B3A80A9531C17F /* Frameworks */,
+				A53E511D00D1B4B740C7BE1D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PhotoToPDFMaker;
+			productName = PhotoToPDFMaker;
+			productReference = E1D9559D11B060451812AB06 /* PhotoToPDFMaker.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		831C888DDCDA2E08FD980C0F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 2630;
+			};
+			buildConfigurationList = 262E785E2D6F7EEC75EE3FB2 /* Build configuration list for PBXProject "PhotoToPDFMaker" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FABF21B9127FB021E4F5F379;
+			productRefGroup = 92DAA633CE690432FD97813E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D4C5F51AFE4AA1C55F38FB9C /* PhotoToPDFMaker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A53E511D00D1B4B740C7BE1D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4E1854D2F590A5200D6DF0F /* PrivacyPolicy.md in Resources */,
+				C4E185492F57D47500D6DF0F /* TermsAndConditions.md in Resources */,
+				C4E185512F5924AA00D6DF0F /* HelpCenter.md in Resources */,
+				BFCD7535867C1DBD9538B8A2 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3F35318DBE53D14F47C01232 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C46679782F53B1E20007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerSignaturePreviewViewController.swift in Sources */,
+				FE60B275F9A7CABA4B1DB6E9 /* PDFSigner.swift in Sources */,
+				F8FF708ACE49A14FE9A8EA3F /* OnboardingPageView.swift in Sources */,
+				C45D6CF52F534C6000A31AAE /* PageSelectionViewController.swift in Sources */,
+				12F64B32751069BE98ECAE60 /* PDFRenderer.swift in Sources */,
+				510CAAEAA5AEC332C05A9350 /* PDFNormalizer.swift in Sources */,
+				A269ECC91AF4AFAC09E8EC58 /* ShareCoordinator.swift in Sources */,
+				F76A71F63C1448FCDD3DAC87 /* DocumentPreviewViewController.swift in Sources */,
+				C466797A2F53B2110007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerSignatureEditableOverlayView.swift in Sources */,
+				AA05E3EDBBD0F9BF244C82C7 /* OCRService.swift in Sources */,
+				C4E185532F5CE34E00D6DF0F /* FavoritesViewController.swift in Sources */,
+				9CC4D75DFC286A0D0B89E6DA /* HomeViewController.swift in Sources */,
+				C45D6CF92F534D3300A31AAE /* TextEditViewController.swift in Sources */,
+				0EFB5A8E2EC660C7A1585A87 /* SignaturePlacementOverlayView.swift in Sources */,
+				C45D6CF32F534C4700A31AAE /* ImageProcessor.swift in Sources */,
+				C4E1854B2F57D60100D6DF0F /* TextDisplayViewController.swift in Sources */,
+				DFFC7BE022E5801F276168D3 /* MainTabBarController.swift in Sources */,
+				B7BE27F0C6301681994121FC /* OnboardingViewController.swift in Sources */,
+				9357EFB96C9E0131CF9C6FEE /* SignatureStore.swift in Sources */,
+				C46679762F53A4340007D640 /* UsersjplProjectsPDFMakerPhotoToPDFMakerPDFActionViewController.swift in Sources */,
+				C4E1854F2F59210A00D6DF0F /* NotificationSettingsViewController.swift in Sources */,
+				22A1B04A077777C9C70D9C82 /* DocumentStore.swift in Sources */,
+				207A647FCB38240FD55A3275 /* ImportCoordinator.swift in Sources */,
+				591341FF4DBBFEC21A57DB10 /* ScanCoordinator.swift in Sources */,
+				D335A9DBA8E8A1FE1CE7225A /* DocumentItem.swift in Sources */,
+				2D22BF6CF02CEEED9462228E /* AppDelegate.swift in Sources */,
+				5AD9316D4E09D93396B5492A /* OCRTextViewController.swift in Sources */,
+				9CA12AEB133689FDB803435E /* HistoryViewController.swift in Sources */,
+				C45D6CFB2F534D5600A31AAE /* SignatureViewController.swift in Sources */,
+				60E5D907E19816A45A257A05 /* SceneDelegate.swift in Sources */,
+				D67CC47E7C241D24FEF3482B /* SettingsViewController.swift in Sources */,
+				C45D6CFD2F534D7800A31AAE /* DocumentActionViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		72A6B16473743A3BBA040633 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		9163E7FE58A7603BEBDAC176 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = UKMZNM385H;
+				INFOPLIST_FILE = PhotoToPDFMaker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.PhotoToPDFMaker;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D1B62919320D2536F4D7031C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = UKMZNM385H;
+				INFOPLIST_FILE = PhotoToPDFMaker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.PhotoToPDFMaker;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		F8DEE082B28AABA2F614B66A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0EF8AFE9562DAB88391B12F3 /* Build configuration list for PBXNativeTarget "PhotoToPDFMaker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9163E7FE58A7603BEBDAC176 /* Release */,
+				D1B62919320D2536F4D7031C /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		262E785E2D6F7EEC75EE3FB2 /* Build configuration list for PBXProject "PhotoToPDFMaker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F8DEE082B28AABA2F614B66A /* Debug */,
+				72A6B16473743A3BBA040633 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 831C888DDCDA2E08FD980C0F /* Project object */;
+}
