@@ -16,7 +16,7 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
     private let signButton = UIButton(type: .system)
     private let ocrButton = UIButton(type: .system)
     private let shareButton = UIButton(type: .system)
-    private let deleteButton = UIButton(type: .system)
+    private let saveButton = UIButton(type: .system)
     
     // Activity Indicator for OCR
     private let activityIndicator = UIActivityIndicatorView(style: .large)
@@ -95,12 +95,12 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
         configureButton(ocrButton, title: "OCR", icon: "doc.text.viewfinder", action: #selector(ocrTapped))
         configureButton(signButton, title: "Sign", icon: "signature", action: #selector(signTapped))
         configureButton(shareButton, title: "Share", icon: "square.and.arrow.up", action: #selector(shareTapped))
-        configureButton(deleteButton, title: "Delete", icon: "trash", action: #selector(deleteTapped), isDestructive: true)
+        configureButton(saveButton, title: "Save", icon: "checkmark.circle.fill", action: #selector(saveTapped), isPrimary: true)
         
         actionStack.addArrangedSubview(ocrButton)
         actionStack.addArrangedSubview(signButton)
         actionStack.addArrangedSubview(shareButton)
-        actionStack.addArrangedSubview(deleteButton)
+        actionStack.addArrangedSubview(saveButton)
         view.addSubview(actionStack)
         
         NSLayoutConstraint.activate([
@@ -194,28 +194,15 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
         ShareCoordinator.shareURL(url, from: self, sourceView: shareButton)
     }
     
+    @objc private func saveTapped() {
+        saveDocument(showFeedback: true)
+    }
+    
     @objc private func settingsTapped() {
         let settingsVC = SettingsViewController()
         let navController = UINavigationController(rootViewController: settingsVC)
         navController.modalPresentationStyle = .pageSheet
         present(navController, animated: true)
-    }
-    
-    @objc private func deleteTapped() {
-        let alert = UIAlertController(
-            title: "Delete Document?",
-            message: "This will permanently delete \"\(documentItem.displayName)\".",
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            guard let self = self else { return }
-            DocumentStore.shared.delete(id: self.documentItem.id)
-            self.navigationController?.popViewController(animated: true)
-        })
-        
-        present(alert, animated: true)
     }
     
     // MARK: - SignatureDelegate
@@ -282,7 +269,11 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
         let pageIndex = document.index(for: currentPage)
         
         // Store the original page for undo
-        let originalPageCopy = currentPage.copy() as! PDFPage
+        guard let originalPageCopy = currentPage.copy() as? PDFPage else {
+            isApplyingSignature = false
+            print("❌ Failed to copy PDF page for undo")
+            return
+        }
         
         // SIMPLIFIED COORDINATE CONVERSION (same as PDFActionViewController)
         // Convert overlay rect to pdfView coordinates
@@ -321,23 +312,15 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
             // Show undo button
             showUndoButton()
             
-            // Save the modified document
-            if let pdfData = document.dataRepresentation() {
-                let url = DocumentStore.shared.url(for: documentItem.id)
-                do {
-                    try pdfData.write(to: url, options: .atomic)
-                    
-                    // Force PDFView to refresh
-                    pdfView.document = nil
-                    pdfView.document = document
-                    
-                    let generator = UINotificationFeedbackGenerator()
-                    generator.notificationOccurred(.success)
-                    
-                    print("✅ Signature applied and saved")
-                } catch {
-                    print("Failed to save signed document: \(error)")
-                }
+            if saveDocument(showFeedback: false) {
+                // Force PDFView to refresh
+                pdfView.document = nil
+                pdfView.document = document
+                
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+                
+                print("✅ Signature applied and saved")
             }
         } else {
             print("Failed to add signature to document")
@@ -390,31 +373,55 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
             showSettingsButton()
         }
         
-        // Save the modified document
-        if let pdfData = document.dataRepresentation() {
-            let url = DocumentStore.shared.url(for: documentItem.id)
-            do {
-                try pdfData.write(to: url, options: .atomic)
-                
-                // Force PDFView to refresh
-                pdfView.document = nil
-                pdfView.document = document
-                
-                let generator = UINotificationFeedbackGenerator()
-                generator.notificationOccurred(.warning)
-                
-                print("↩️ Signature undone")
-                
-                // Show toast
-                let alert = UIAlertController(title: nil, message: "Signature removed", preferredStyle: .alert)
+        if saveDocument(showFeedback: false) {
+            // Force PDFView to refresh
+            pdfView.document = nil
+            pdfView.document = document
+            
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.warning)
+            
+            print("↩️ Signature undone")
+            
+            // Show toast
+            let alert = UIAlertController(title: nil, message: "Signature removed", preferredStyle: .alert)
+            present(alert, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                alert.dismiss(animated: true)
+            }
+        }
+    }
+    
+    @discardableResult
+    private func saveDocument(showFeedback: Bool) -> Bool {
+        guard let document = pdfDocument,
+              let pdfData = document.dataRepresentation() else {
+            return false
+        }
+        
+        let url = DocumentStore.shared.url(for: documentItem.id)
+        do {
+            try pdfData.write(to: url, options: .atomic)
+            if showFeedback {
+                let alert = UIAlertController(title: nil, message: "Document saved", preferredStyle: .alert)
                 present(alert, animated: true)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     alert.dismiss(animated: true)
                 }
-            } catch {
-                print("Failed to save document after undo: \(error)")
             }
+            return true
+        } catch {
+            if showFeedback {
+                let alert = UIAlertController(
+                    title: "Save Failed",
+                    message: "Could not save document changes.",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                present(alert, animated: true)
+            }
+            print("Failed to save document: \(error)")
+            return false
         }
     }
 }
-

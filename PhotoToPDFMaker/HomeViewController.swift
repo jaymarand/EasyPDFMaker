@@ -429,15 +429,14 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - PageSelectionDelegate
     
     func pageSelectionDidSelect(images: [UIImage]) {
-        // If only one image, use original single-page flow
-        if images.count == 1, let image = images.first {
-            showDocumentActions(for: image)
+        guard let firstImage = images.first else { return }
+        scannedImages.removeAll()
+        
+        if images.count == 1 {
+            showDocumentActions(for: firstImage)
         } else {
-            // TODO: Multi-page flow - for now, just use first image
-            // This will be implemented later with horizontal page scrolling
-            if let firstImage = images.first {
-                showDocumentActions(for: firstImage)
-            }
+            let remainingImages = Array(images.dropFirst())
+            showDocumentActions(for: firstImage, additionalImages: remainingImages)
         }
     }
     
@@ -446,7 +445,11 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     private func showDocumentActions(for image: UIImage) {
-        let actionVC = DocumentActionViewController(image: image)
+        showDocumentActions(for: image, additionalImages: [])
+    }
+    
+    private func showDocumentActions(for image: UIImage, additionalImages: [UIImage]) {
+        let actionVC = DocumentActionViewController(image: image, additionalImages: additionalImages)
         let nav = UINavigationController(rootViewController: actionVC)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
@@ -496,7 +499,6 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // Favorite action
         let favoriteTitle = doc.isFavorite ? "Unfavorite" : "Favorite"
-        let favoriteIcon = doc.isFavorite ? "star.slash" : "star.fill"
         alert.addAction(UIAlertAction(title: favoriteTitle, style: .default, handler: { [weak self] _ in
             self?.toggleFavorite(for: doc)
         }))

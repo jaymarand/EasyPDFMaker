@@ -5,7 +5,7 @@
 
 import UIKit
 
-class MainTabBarController: UITabBarController, ScanCoordinatorDelegate {
+class MainTabBarController: UITabBarController, ScanCoordinatorDelegate, PageSelectionDelegate {
 
     private var scanCoordinator: ScanCoordinator?
     private var centerButton: UIButton!
@@ -175,7 +175,7 @@ class MainTabBarController: UITabBarController, ScanCoordinatorDelegate {
         } else {
             // Show page selection for multiple images
             let selectionVC = PageSelectionViewController(images: images)
-            selectionVC.delegate = navController.topViewController as? any PageSelectionDelegate
+            selectionVC.delegate = self
             selectionVC.modalPresentationStyle = .fullScreen
             navController.present(selectionVC, animated: true)
         }
@@ -183,6 +183,25 @@ class MainTabBarController: UITabBarController, ScanCoordinatorDelegate {
     
     func scanCoordinatorDidCancel() {
         print("Scan cancelled")
+    }
+    
+    // MARK: - PageSelectionDelegate
+    
+    func pageSelectionDidSelect(images: [UIImage]) {
+        guard let navController = selectedViewController as? UINavigationController,
+              let firstImage = images.first else {
+            return
+        }
+        
+        let remainingImages = Array(images.dropFirst())
+        let actionVC = DocumentActionViewController(image: firstImage, additionalImages: remainingImages)
+        let actionNav = UINavigationController(rootViewController: actionVC)
+        actionNav.modalPresentationStyle = .fullScreen
+        navController.present(actionNav, animated: true)
+    }
+    
+    func pageSelectionDidCancel() {
+        // No-op
     }
     
     override func viewDidLayoutSubviews() {

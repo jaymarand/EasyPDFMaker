@@ -5,15 +5,21 @@
 
 import UIKit
 
-class DocumentActionViewController: UIViewController, TextEditDelegate, SignatureDelegate, SignatureEditableDelegate {
+class DocumentActionViewController: UIViewController, TextEditDelegate, SignatureDelegate, SignatureEditableDelegate, UIScrollViewDelegate {
     
     private let scannedImage: UIImage
+    private var pageImages: [UIImage]
+    private var currentPageIndex = 0
     private var enhancedImage: UIImage
     private var unsignedImage: UIImage? // Store version before signature
+    private var unsignedImagePageIndex: Int?
     private var extractedText: String?
     private var signatureImage: UIImage?
     
-    private let imageView = UIImageView()
+    private let imageScrollView = UIScrollView()
+    private let pageStackView = UIStackView()
+    private var pageImageViews: [UIImageView] = []
+    private let pageLabel = UILabel()
     private let actionStack = UIStackView()
     private let extractTextButton = UIButton(type: .system)
     private let signButton = UIButton(type: .system)
@@ -21,8 +27,9 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
     private let saveButton = UIButton(type: .system)
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     
-    init(image: UIImage) {
+    init(image: UIImage, additionalImages: [UIImage] = []) {
         self.scannedImage = image
+        self.pageImages = [image] + additionalImages
         self.enhancedImage = image
         super.init(nibName: nil, bundle: nil)
     }
@@ -53,13 +60,47 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
         )
         navigationItem.rightBarButtonItem = settingsButton
         
-        // Image view
-        imageView.contentMode = .scaleAspectFit
-        imageView.backgroundColor = .secondarySystemBackground
-        imageView.layer.cornerRadius = 12
-        imageView.clipsToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(imageView)
+        imageScrollView.isPagingEnabled = true
+        imageScrollView.showsHorizontalScrollIndicator = false
+        imageScrollView.delegate = self
+        imageScrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(imageScrollView)
+        
+        pageStackView.axis = .horizontal
+        pageStackView.spacing = 0
+        pageStackView.distribution = .fillEqually
+        pageStackView.translatesAutoresizingMaskIntoConstraints = false
+        imageScrollView.addSubview(pageStackView)
+        
+        for image in pageImages {
+            let imageContainer = UIView()
+            imageContainer.translatesAutoresizingMaskIntoConstraints = false
+            
+            let imageView = UIImageView(image: image)
+            imageView.contentMode = .scaleAspectFit
+            imageView.backgroundColor = .secondarySystemBackground
+            imageView.layer.cornerRadius = 12
+            imageView.clipsToBounds = true
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            
+            imageContainer.addSubview(imageView)
+            pageStackView.addArrangedSubview(imageContainer)
+            pageImageViews.append(imageView)
+            
+            NSLayoutConstraint.activate([
+                imageView.topAnchor.constraint(equalTo: imageContainer.topAnchor),
+                imageView.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
+                imageView.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
+                imageView.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
+                imageContainer.widthAnchor.constraint(equalTo: imageScrollView.widthAnchor)
+            ])
+        }
+        
+        pageLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        pageLabel.textColor = .secondaryLabel
+        pageLabel.textAlignment = .center
+        pageLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(pageLabel)
         
         // Activity indicator
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -83,19 +124,30 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
         view.addSubview(actionStack)
         
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            imageView.bottomAnchor.constraint(equalTo: actionStack.topAnchor, constant: -16),
+            imageScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            imageScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            imageScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            imageScrollView.bottomAnchor.constraint(equalTo: pageLabel.topAnchor, constant: -8),
             
-            activityIndicator.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
+            pageStackView.topAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.topAnchor),
+            pageStackView.leadingAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.leadingAnchor),
+            pageStackView.trailingAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.trailingAnchor),
+            pageStackView.bottomAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.bottomAnchor),
+            pageStackView.heightAnchor.constraint(equalTo: imageScrollView.frameLayoutGuide.heightAnchor),
+            
+            pageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pageLabel.bottomAnchor.constraint(equalTo: actionStack.topAnchor, constant: -8),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: imageScrollView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: imageScrollView.centerYAnchor),
             
             actionStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             actionStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             actionStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             actionStack.heightAnchor.constraint(equalToConstant: 60)
         ])
+        
+        updatePageUI()
     }
     
     private func configureButton(_ button: UIButton, title: String, icon: String, action: Selector, isPrimary: Bool = false) {
@@ -116,21 +168,43 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
     
     private func performAutoEnhancement() {
         activityIndicator.startAnimating()
-        imageView.alpha = 0.5
+        imageScrollView.alpha = 0.5
         
         ImageProcessor.enhanceDocument(image: scannedImage) { [weak self] enhancedImage in
             guard let self = self else { return }
             self.activityIndicator.stopAnimating()
-            self.imageView.alpha = 1.0
+            self.imageScrollView.alpha = 1.0
             
             if let enhanced = enhancedImage {
                 self.enhancedImage = enhanced
-                self.imageView.image = enhanced
+                self.pageImages[0] = enhanced
+                self.pageImageViews[0].image = enhanced
             } else {
                 // If enhancement fails, use original
-                self.imageView.image = self.scannedImage
+                self.pageImages[0] = self.scannedImage
+                self.pageImageViews[0].image = self.scannedImage
             }
         }
+    }
+    
+    private func updatePageUI() {
+        enhancedImage = pageImages[currentPageIndex]
+        pageLabel.text = "Page \(currentPageIndex + 1) of \(pageImages.count)"
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageWidth = scrollView.bounds.width
+        guard pageWidth > 0 else { return }
+        currentPageIndex = Int(round(scrollView.contentOffset.x / pageWidth))
+        updatePageUI()
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard !decelerate else { return }
+        let pageWidth = scrollView.bounds.width
+        guard pageWidth > 0 else { return }
+        currentPageIndex = Int(round(scrollView.contentOffset.x / pageWidth))
+        updatePageUI()
     }
     
     @objc private func extractTextTapped() {
@@ -188,7 +262,8 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
         generatePDF { [weak self] pdfData in
             guard let self = self, let data = pdfData else { return }
             
-            if DocumentStore.shared.saveNewDocument(pdfData: data, pageCount: 1) != nil {
+            let pageCount = self.pageImages.count
+            if DocumentStore.shared.saveNewDocument(pdfData: data, pageCount: pageCount) != nil {
                 self.dismiss(animated: true) {
                     self.navigationController?.popToRootViewController(animated: false)
                 }
@@ -211,8 +286,12 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
         // Restore the unsigned version
         if let unsigned = unsignedImage {
             enhancedImage = unsigned
-            imageView.image = unsigned
+            if unsignedImagePageIndex == currentPageIndex {
+                pageImages[currentPageIndex] = unsigned
+                pageImageViews[currentPageIndex].image = unsigned
+            }
             unsignedImage = nil
+            unsignedImagePageIndex = nil
             
             // Restore settings button
             let settingsButton = UIBarButtonItem(
@@ -235,15 +314,11 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
     }
     
     private func generatePDF(completion: @escaping (Data?) -> Void) {
-        // Use the current enhanced image (which already has signature if applied)
-        let finalImage = enhancedImage
-        
-        // If text was extracted and edited, create searchable PDF
-        if let text = extractedText {
-            PDFRenderer.createSearchablePDF(from: finalImage, text: text, completion: completion)
+        // If text was extracted and edited, only single-page docs can be exported as searchable currently.
+        if let text = extractedText, pageImages.count == 1 {
+            PDFRenderer.createSearchablePDF(from: pageImages[0], text: text, completion: completion)
         } else {
-            // Regular PDF without searchable text
-            PDFRenderer.createPDF(from: [finalImage], completion: completion)
+            PDFRenderer.createPDF(from: pageImages, completion: completion)
         }
     }
     
@@ -298,8 +373,8 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
         print("   View bounds: \(view.bounds)")
         print("   Signature size: \(signature.size)")
         
-        // Calculate initial signature rect based on image view position
-        let imageViewRect = imageView.frame
+        guard let activeImageView = pageImageViews[safe: currentPageIndex] else { return }
+        let imageViewRect = activeImageView.convert(activeImageView.bounds, to: view)
         let signatureSize = CGSize(width: imageViewRect.width * 0.4, height: imageViewRect.height * 0.2)
         let initialRect = CGRect(
             x: imageViewRect.midX - signatureSize.width / 2,
@@ -322,14 +397,16 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
     
     func didConfirmSignaturePlacement(rect: CGRect, in overlayView: UIView) {
         print("✅ Signature confirmed at rect: \(rect)")
-        print("   Image view frame: \(imageView.frame)")
+        
+        guard let activeImageView = pageImageViews[safe: currentPageIndex] else { return }
+        print("   Image view frame: \(activeImageView.frame)")
         
         // Convert the overlay rect to image coordinates
-        let imageViewRect = overlayView.convert(rect, to: imageView)
+        let imageViewRect = overlayView.convert(rect, to: activeImageView)
         
         // Convert from view coordinates to image coordinates
         let imageSize = enhancedImage.size
-        let imageViewSize = imageView.bounds.size
+        let imageViewSize = activeImageView.bounds.size
         
         // Calculate scale factor (imageView uses scaleAspectFit)
         let imageAspect = imageSize.width / imageSize.height
@@ -369,11 +446,18 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
         
         // Save the unsigned version before applying signature
         unsignedImage = enhancedImage
+        unsignedImagePageIndex = currentPageIndex
+        
+        guard let signatureImage else {
+            print("❌ Signature image missing at placement confirmation")
+            return
+        }
         
         // Overlay signature on the image
-        if let signedImage = overlaySignatureAtPosition(signatureImage!, on: enhancedImage, at: imageRect) {
+        if let signedImage = overlaySignatureAtPosition(signatureImage, on: enhancedImage, at: imageRect) {
             enhancedImage = signedImage
-            imageView.image = signedImage
+            pageImages[currentPageIndex] = signedImage
+            pageImageViews[currentPageIndex].image = signedImage
             print("✅ Signature overlaid on image")
             
             // Show undo button in navigation bar
@@ -394,3 +478,10 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
         print("❌ Signature placement cancelled")
     }
 }
+
+private extension Array {
+    subscript(safe index: Int) -> Element? {
+        indices.contains(index) ? self[index] : nil
+    }
+}
+

@@ -122,11 +122,12 @@ class PDFActionViewController: UIViewController, SignatureDelegate, SignatureEdi
     }
     
     private func loadPDF() {
-        guard pdfURL.startAccessingSecurityScopedResource() else {
-            print("⚠️ Could not access PDF")
-            return
+        let hasSecurityAccess = pdfURL.startAccessingSecurityScopedResource()
+        defer {
+            if hasSecurityAccess {
+                pdfURL.stopAccessingSecurityScopedResource()
+            }
         }
-        defer { pdfURL.stopAccessingSecurityScopedResource() }
         
         if let document = PDFDocument(url: pdfURL) {
             self.pdfDocument = document
@@ -283,7 +284,11 @@ class PDFActionViewController: UIViewController, SignatureDelegate, SignatureEdi
         let pageIndex = document.index(for: currentPage)
         
         // Store the original page for undo
-        let originalPageCopy = currentPage.copy() as! PDFPage
+        guard let originalPageCopy = currentPage.copy() as? PDFPage else {
+            isApplyingSignature = false
+            print("❌ Failed to copy PDF page for undo")
+            return
+        }
         
         // SIMPLIFIED COORDINATE CONVERSION
         // Convert overlay rect to pdfView coordinates

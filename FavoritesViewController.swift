@@ -192,8 +192,6 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // Swipe to unfavorite or delete
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let doc = favoriteDocuments[indexPath.row]
-        
         let archiveAction = UIContextualAction(style: .normal, title: "Archive") { [weak self] (action, view, completionHandler) in
             self?.toggleArchive(at: indexPath)
             completionHandler(true)
