@@ -19,6 +19,7 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
     private let imageScrollView = UIScrollView()
     private let pageStackView = UIStackView()
     private var pageImageViews: [UIImageView] = []
+    private var pageStackWidthConstraint: NSLayoutConstraint?
     private let pageLabel = UILabel()
     private let actionStack = UIStackView()
     private let extractTextButton = UIButton(type: .system)
@@ -42,6 +43,18 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
         super.viewDidLoad()
         setupUI()
         performAutoEnhancement()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setUnderlyingCenterButtonHidden(true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if isBeingDismissed || navigationController?.isBeingDismissed == true {
+            setUnderlyingCenterButtonHidden(false)
+        }
     }
     
     private func setupUI() {
@@ -68,7 +81,7 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
         
         pageStackView.axis = .horizontal
         pageStackView.spacing = 0
-        pageStackView.distribution = .fillEqually
+        pageStackView.distribution = .fill
         pageStackView.translatesAutoresizingMaskIntoConstraints = false
         imageScrollView.addSubview(pageStackView)
         
@@ -124,19 +137,19 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
         view.addSubview(actionStack)
         
         NSLayoutConstraint.activate([
-            imageScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            pageLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            pageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            imageScrollView.topAnchor.constraint(equalTo: pageLabel.bottomAnchor, constant: 8),
             imageScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             imageScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            imageScrollView.bottomAnchor.constraint(equalTo: pageLabel.topAnchor, constant: -8),
+            imageScrollView.bottomAnchor.constraint(equalTo: actionStack.topAnchor, constant: -16),
             
             pageStackView.topAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.topAnchor),
             pageStackView.leadingAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.leadingAnchor),
             pageStackView.trailingAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.trailingAnchor),
             pageStackView.bottomAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.bottomAnchor),
             pageStackView.heightAnchor.constraint(equalTo: imageScrollView.frameLayoutGuide.heightAnchor),
-            
-            pageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pageLabel.bottomAnchor.constraint(equalTo: actionStack.topAnchor, constant: -8),
             
             activityIndicator.centerXAnchor.constraint(equalTo: imageScrollView.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: imageScrollView.centerYAnchor),
@@ -146,6 +159,12 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
             actionStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             actionStack.heightAnchor.constraint(equalToConstant: 60)
         ])
+        
+        pageStackWidthConstraint = pageStackView.widthAnchor.constraint(
+            equalTo: imageScrollView.frameLayoutGuide.widthAnchor,
+            multiplier: CGFloat(pageImages.count)
+        )
+        pageStackWidthConstraint?.isActive = true
         
         updatePageUI()
     }
@@ -264,6 +283,7 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
             
             let pageCount = self.pageImages.count
             if DocumentStore.shared.saveNewDocument(pdfData: data, pageCount: pageCount) != nil {
+                self.setUnderlyingCenterButtonHidden(false)
                 self.dismiss(animated: true) {
                     self.navigationController?.popToRootViewController(animated: false)
                 }
@@ -272,6 +292,7 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
     }
     
     @objc private func cancelTapped() {
+        setUnderlyingCenterButtonHidden(false)
         dismiss(animated: true)
     }
     
@@ -477,6 +498,27 @@ class DocumentActionViewController: UIViewController, TextEditDelegate, Signatur
     func didCancelSignaturePlacement() {
         print("❌ Signature placement cancelled")
     }
+    
+    private func setUnderlyingCenterButtonHidden(_ hidden: Bool) {
+        if let tabController = view.window?.rootViewController as? MainTabBarController {
+            tabController.setCenterButtonHidden(hidden)
+            return
+        }
+        
+        var candidate: UIViewController? = presentingViewController
+        while let current = candidate {
+            if let tabController = current as? MainTabBarController {
+                tabController.setCenterButtonHidden(hidden)
+                return
+            }
+            if let nav = current as? UINavigationController,
+               let tabController = nav.tabBarController as? MainTabBarController {
+                tabController.setCenterButtonHidden(hidden)
+                return
+            }
+            candidate = current.presentingViewController
+        }
+    }
 }
 
 private extension Array {
@@ -484,4 +526,3 @@ private extension Array {
         indices.contains(index) ? self[index] : nil
     }
 }
-

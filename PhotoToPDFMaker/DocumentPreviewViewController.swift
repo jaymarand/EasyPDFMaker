@@ -11,6 +11,7 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
     private let documentItem: DocumentItem
     private let pdfView = PDFView()
     private var pdfDocument: PDFDocument?
+    private let pageLabel = UILabel()
     
     private let actionStack = UIStackView()
     private let signButton = UIButton(type: .system)
@@ -44,19 +45,31 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
         title = documentItem.displayName
         setupNavigationBar()
         setupUI()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(pdfPageDidChange),
+            name: Notification.Name.PDFViewPageChanged,
+            object: pdfView
+        )
         loadPDF()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Hide tab bar when viewing document
         tabBarController?.tabBar.isHidden = true
+        (tabBarController as? MainTabBarController)?.setCenterButtonHidden(true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Show tab bar when leaving
         tabBarController?.tabBar.isHidden = false
+        (tabBarController as? MainTabBarController)?.setCenterButtonHidden(false)
     }
     
     private func setupNavigationBar() {
@@ -76,10 +89,17 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
         // PDF View
         pdfView.translatesAutoresizingMaskIntoConstraints = false
         pdfView.autoScales = true
-        pdfView.displayMode = .singlePageContinuous
-        pdfView.displayDirection = .vertical
+        pdfView.displayMode = .singlePage
+        pdfView.displayDirection = .horizontal
+        pdfView.usePageViewController(true, withViewOptions: nil)
         pdfView.backgroundColor = .systemBackground
         view.addSubview(pdfView)
+        
+        pageLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        pageLabel.textColor = .secondaryLabel
+        pageLabel.textAlignment = .center
+        pageLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(pageLabel)
         
         // Activity indicator
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -108,6 +128,9 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
             pdfView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pdfView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             pdfView.bottomAnchor.constraint(equalTo: actionStack.topAnchor, constant: -16),
+            
+            pageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pageLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -148,8 +171,33 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
         if let document = PDFDocument(url: url) {
             self.pdfDocument = document
             pdfView.document = document
+            DispatchQueue.main.async { [weak self] in
+                self?.updatePageLabel()
+            }
         } else {
             print("Failed to load PDF at \(url)")
+        }
+    }
+    
+    @objc private func pdfPageDidChange() {
+        updatePageLabel()
+    }
+    
+    private func updatePageLabel() {
+        guard let document = pdfDocument else {
+            pageLabel.text = nil
+            return
+        }
+        let pageCount = document.pageCount
+        guard pageCount > 0 else {
+            pageLabel.text = nil
+            return
+        }
+        if let currentPage = pdfView.currentPage {
+            let currentIndex = document.index(for: currentPage)
+            pageLabel.text = "Page \(currentIndex + 1) of \(pageCount)"
+        } else {
+            pageLabel.text = "Page 1 of \(pageCount)"
         }
     }
     
@@ -316,6 +364,7 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
                 // Force PDFView to refresh
                 pdfView.document = nil
                 pdfView.document = document
+                updatePageLabel()
                 
                 let generator = UINotificationFeedbackGenerator()
                 generator.notificationOccurred(.success)
@@ -377,6 +426,7 @@ class DocumentPreviewViewController: UIViewController, SignatureEditableDelegate
             // Force PDFView to refresh
             pdfView.document = nil
             pdfView.document = document
+            updatePageLabel()
             
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.warning)

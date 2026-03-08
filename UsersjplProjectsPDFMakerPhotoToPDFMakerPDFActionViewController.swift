@@ -13,10 +13,12 @@ class PDFActionViewController: UIViewController, SignatureDelegate, SignatureEdi
     private var signatureImage: UIImage?
     
     private let pdfView = PDFView()
+    private let pageLabel = UILabel()
     private let actionStack = UIStackView()
     private let extractTextButton = UIButton(type: .system)
     private let signButton = UIButton(type: .system)
     private let shareButton = UIButton(type: .system)
+    private let saveButton = UIButton(type: .system)
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     
     // Track signature annotations for undo functionality
@@ -41,8 +43,18 @@ class PDFActionViewController: UIViewController, SignatureDelegate, SignatureEdi
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(pdfPageDidChange),
+            name: Notification.Name.PDFViewPageChanged,
+            object: pdfView
+        )
         loadPDF()
         setupNavigationBar()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func setupNavigationBar() {
@@ -64,60 +76,75 @@ class PDFActionViewController: UIViewController, SignatureDelegate, SignatureEdi
         navigationItem.title = "Imported PDF"
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
         
-        // PDF view (top half)
+        // PDF view
         pdfView.autoScales = true
-        pdfView.displayMode = .singlePageContinuous
-        pdfView.displayDirection = .vertical
+        pdfView.displayMode = .singlePage
+        pdfView.displayDirection = .horizontal
+        pdfView.usePageViewController(true, withViewOptions: nil)
         pdfView.backgroundColor = .secondarySystemBackground
         pdfView.layer.cornerRadius = 12
         pdfView.clipsToBounds = true
         pdfView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(pdfView)
         
+        pageLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        pageLabel.textColor = .secondaryLabel
+        pageLabel.textAlignment = .center
+        pageLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(pageLabel)
+        
         // Activity indicator
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(activityIndicator)
         
         // Action buttons stack
-        actionStack.axis = .vertical
-        actionStack.spacing = 12
+        actionStack.axis = .horizontal
+        actionStack.spacing = 16
         actionStack.distribution = .fillEqually
         actionStack.translatesAutoresizingMaskIntoConstraints = false
         
-        configureButton(extractTextButton, title: "Extract Text (OCR)", icon: "doc.text.viewfinder", action: #selector(extractTextTapped))
-        configureButton(signButton, title: "Add Signature", icon: "signature", action: #selector(signTapped))
-        configureButton(shareButton, title: "Share PDF", icon: "square.and.arrow.up", action: #selector(shareTapped), isPrimary: true)
+        configureButton(extractTextButton, title: "OCR", icon: "doc.text.viewfinder", action: #selector(extractTextTapped))
+        configureButton(signButton, title: "Sign", icon: "signature", action: #selector(signTapped))
+        configureButton(shareButton, title: "Share", icon: "square.and.arrow.up", action: #selector(shareTapped))
+        configureButton(saveButton, title: "Save", icon: "checkmark.circle.fill", action: #selector(saveTapped), isPrimary: true)
         
         actionStack.addArrangedSubview(extractTextButton)
         actionStack.addArrangedSubview(signButton)
         actionStack.addArrangedSubview(shareButton)
+        actionStack.addArrangedSubview(saveButton)
         view.addSubview(actionStack)
         
         NSLayoutConstraint.activate([
-            pdfView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            pageLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            pageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            pdfView.topAnchor.constraint(equalTo: pageLabel.bottomAnchor, constant: 8),
             pdfView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             pdfView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            pdfView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
+            pdfView.bottomAnchor.constraint(equalTo: actionStack.topAnchor, constant: -16),
             
             activityIndicator.centerXAnchor.constraint(equalTo: pdfView.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: pdfView.centerYAnchor),
             
-            actionStack.topAnchor.constraint(equalTo: pdfView.bottomAnchor, constant: 24),
-            actionStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            actionStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
-            actionStack.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            actionStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            actionStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            actionStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            actionStack.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     private func configureButton(_ button: UIButton, title: String, icon: String, action: Selector, isPrimary: Bool = false) {
-        button.setTitle(" \(title)", for: .normal)
-        button.setImage(UIImage(systemName: icon), for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 17, weight: isPrimary ? .bold : .medium)
-        button.backgroundColor = isPrimary ? .systemBlue : .secondarySystemBackground
-        button.setTitleColor(isPrimary ? .white : .label, for: .normal)
-        button.tintColor = isPrimary ? .white : .systemBlue
-        button.layer.cornerRadius = 12
-        button.contentHorizontalAlignment = .center
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: icon)
+        config.title = title
+        config.imagePlacement = .top
+        config.imagePadding = 4
+        config.baseForegroundColor = isPrimary ? .white : .systemBlue
+        config.background.backgroundColor = isPrimary ? .systemBlue : .secondarySystemBackground
+        config.background.cornerRadius = 12
+        
+        button.configuration = config
+        button.titleLabel?.font = .systemFont(ofSize: 12, weight: isPrimary ? .semibold : .medium)
         button.addTarget(self, action: action, for: .touchUpInside)
     }
     
@@ -132,6 +159,31 @@ class PDFActionViewController: UIViewController, SignatureDelegate, SignatureEdi
         if let document = PDFDocument(url: pdfURL) {
             self.pdfDocument = document
             pdfView.document = document
+            DispatchQueue.main.async { [weak self] in
+                self?.updatePageLabel()
+            }
+        }
+    }
+    
+    @objc private func pdfPageDidChange() {
+        updatePageLabel()
+    }
+    
+    private func updatePageLabel() {
+        guard let document = pdfDocument else {
+            pageLabel.text = nil
+            return
+        }
+        let pageCount = document.pageCount
+        guard pageCount > 0 else {
+            pageLabel.text = nil
+            return
+        }
+        if let currentPage = pdfView.currentPage {
+            let currentIndex = document.index(for: currentPage)
+            pageLabel.text = "Page \(currentIndex + 1) of \(pageCount)"
+        } else {
+            pageLabel.text = "Page 1 of \(pageCount)"
         }
     }
     
@@ -246,6 +298,17 @@ class PDFActionViewController: UIViewController, SignatureDelegate, SignatureEdi
         }
     }
     
+    @objc private func saveTapped() {
+        guard let document = pdfDocument,
+              let data = document.dataRepresentation() else {
+            return
+        }
+        
+        if DocumentStore.shared.saveNewDocument(pdfData: data, pageCount: max(1, document.pageCount)) != nil {
+            dismiss(animated: true)
+        }
+    }
+    
     @objc private func cancelTapped() {
         dismiss(animated: true)
     }
@@ -328,6 +391,7 @@ class PDFActionViewController: UIViewController, SignatureDelegate, SignatureEdi
             // Force PDFView to refresh
             pdfView.document = nil
             pdfView.document = document
+            updatePageLabel()
             
             // Haptic feedback
             let generator = UINotificationFeedbackGenerator()
@@ -374,6 +438,7 @@ class PDFActionViewController: UIViewController, SignatureDelegate, SignatureEdi
         // Force PDFView to refresh
         pdfView.document = nil
         pdfView.document = document
+        updatePageLabel()
         
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.warning)

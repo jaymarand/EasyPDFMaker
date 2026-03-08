@@ -204,11 +204,16 @@ class MainTabBarController: UITabBarController, ScanCoordinatorDelegate, PageSel
         // No-op
     }
     
+    func setCenterButtonHidden(_ hidden: Bool) {
+        centerButton.isHidden = hidden
+        centerButton.isUserInteractionEnabled = !hidden
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         // Ensure center button stays on top
-        if let centerButton = centerButton {
+        if let centerButton = centerButton, !centerButton.isHidden {
             view.bringSubviewToFront(centerButton)
         }
     }
