@@ -29,10 +29,9 @@ class PageSelectionViewController: UIViewController {
         self.selectedIndices = Set(0..<images.count)
         
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
+        layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 16
-        layout.minimumInteritemSpacing = 16
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 20, bottom: 16, right: 20)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
         super.init(nibName: nil, bundle: nil)
@@ -162,11 +161,10 @@ extension PageSelectionViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        // 2 columns layout
-        let spacing: CGFloat = 16
-        let totalSpacing = spacing * 3 // left + middle + right
-        let width = (collectionView.bounds.width - totalSpacing) / 2
-        return CGSize(width: width, height: width * 1.4)
+        // Smaller cards for better overview - about 60% of screen height
+        let height = (collectionView.bounds.height - 40) * 0.6
+        let width = height * 0.7 // Portrait aspect ratio
+        return CGSize(width: width, height: height)
     }
 }
 
