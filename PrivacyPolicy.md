@@ -1,14 +1,14 @@
-# Privacy Policy for Image To PDF Maker
+# Privacy Policy for Easy PDF Maker
 
 **Last updated: March 04, 2026**
 
 ## Introduction
 
-At Image To PDF Maker, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, and safeguard your information when you use our mobile application.
+At Easy PDF Maker, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, and safeguard your information when you use our mobile application.
 
 ## Our Commitment to Privacy
 
-Image To PDF Maker is designed with your privacy in mind. The app processes all images and documents locally on your device. We do not upload your photos, images, or documents to external servers or cloud storage unless you explicitly choose to share the converted PDFs through third-party services.
+Easy PDF Maker is designed with your privacy in mind. The app processes all images and documents locally on your device. We do not upload your photos, images, or documents to external servers or cloud storage unless you explicitly choose to share the converted PDFs through third-party services.
 
 ## Information We Collect
 
@@ -133,7 +133,7 @@ You may ask us to correct inaccurate information that we have about you.
 
 ### Right to Opt-Out
 
-Image To PDF Maker does not sell or share personal information. We do not engage in the sale of personal data.
+Easy PDF Maker does not sell or share personal information. We do not engage in the sale of personal data.
 
 ### Right to Non-Discrimination
 
@@ -185,8 +185,8 @@ Your continued use of the app after changes are posted constitutes your acceptan
 
 If you have any questions, concerns, or requests regarding this Privacy Policy or how we handle your personal information, please contact us:
 
-- By email: support@imagetopdfmaker.com
-- By visiting our website: http://imagetopdfmaker.com
+- By email: support@easypdfmaker.net
+- By visiting our website: https://easypdfmaker.net/privacy.html
 
 ## Exercising Your Rights
 
@@ -198,4 +198,4 @@ If you are located in the European Economic Area, you have the right to lodge a 
 
 ## Your Consent
 
-By using Image To PDF Maker, you consent to this Privacy Policy and agree to its terms. If you do not agree with this policy, please do not use our app.
+By using Easy PDF Maker, you consent to this Privacy Policy and agree to its terms. If you do not agree with this policy, please do not use our app.

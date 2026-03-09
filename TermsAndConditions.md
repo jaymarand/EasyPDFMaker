@@ -1,4 +1,4 @@
-# Terms and Conditions for Image To PDF Maker
+# Terms and Conditions for Easy PDF Maker
 
 **Last updated: March 04, 2026**
 
@@ -14,7 +14,7 @@ The words whose initial letters are capitalized have meanings defined under the 
 
 For the purposes of these Terms and Conditions:
 
-**Application** means the software program provided by the Company downloaded by You on any electronic device, named Image To PDF Maker
+**Application** means the software program provided by the Company downloaded by You on any electronic device, named Easy PDF Maker
 
 **Application Store** means the digital distribution service operated and developed by Apple Inc. (Apple App Store) or Google Inc. (Google Play Store) in which the Application has been downloaded.
 
@@ -22,7 +22,7 @@ For the purposes of these Terms and Conditions:
 
 **Country** refers to: Ohio, United States
 
-**Company** (referred to as either "the Company", "We", "Us" or "Our" in these Terms and Conditions) refers to Image To PDF Maker.
+**Company** (referred to as either "the Company", "We", "Us" or "Our" in these Terms and Conditions) refers to Easy PDF Maker.
 
 **Content** means any images, photos, documents, files, or other materials that You upload, import, or otherwise provide to the Service for processing or conversion.
 
@@ -174,5 +174,5 @@ By continuing to access or use Our Service after those revisions become effectiv
 
 If you have any questions about these Terms and Conditions, You can contact us:
 
-- By email: support@imagetopdfmaker.com
-- By visiting this page on our website: http://imagetopdfmaker.com
+- By email: support@easypdfmaker.net
+- By visiting this page on our website: https://easypdfmaker.net/terms.html
